@@ -16,6 +16,32 @@ services:
       - /mnt/slow-storage/temp/downloads/media/movies:/movies
       - /mnt/slow-storage/temp/downloads/media/series:/tv
 
+  prd-radarr-app:
+    image: docker-registry.theautomation.nl/coen/prd-radarr-app:latest
+    container_name: prd-radarr-app
+    restart: unless-stopped
+    env_file: prd-bazarr-app.env
+    ports:
+      - 7878:7878
+    networks:
+      home-services:
+    volumes:
+      - ./config:/config
+      - /mnt/slow-storage/temp/downloads/media/movies:/movies
+
+  prd-sonarr-app:
+    image: docker-registry.theautomation.nl/coen/prd-sonarr-app:latest
+    container_name: prd-sonarr-app
+    restart: unless-stopped
+    env_file: prd-bazarr-app.env
+    ports:
+      - 8989:8989
+    networks:
+      home-services:
+    volumes:
+      - ./config:/config
+      - /mnt/slow-storage/temp/downloads/media/series:/tv
+
 # NETWORKS
 networks:
 
