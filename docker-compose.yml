@@ -1,0 +1,27 @@
+---
+version: '3.8'
+services:
+
+  prd-bazarr-app:
+    image: docker-registry.theautomation.nl/coen/prd-bazarr-app:latest
+    container_name: prd-bazarr-app
+    restart: unless-stopped
+    env_file: prd-bazarr-app.env
+    ports:
+      - 6767:6767
+    networks:
+      home-services:
+    volumes:
+      - ./config:/config
+      - /mnt/slow-storage/temp/downloads/media/movies:/movies
+      - /mnt/slow-storage/temp/downloads/media/series:/tv
+
+# NETWORKS
+networks:
+
+  home-services:
+    driver: bridge
+    name: home-services
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

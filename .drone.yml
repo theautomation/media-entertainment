@@ -1,0 +1,81 @@
+---
+kind: pipeline
+name: validate
+
+steps:
+  - name: yamllint
+    image: sdesbure/yamllint:latest
+    commands:
+      - yamllint -c ./.yamllint .
+
+  - name: docker-compose
+    image: tmaier/docker-compose:latest
+    commands:
+      - mv prd-bazarr-app.env.example prd-bazarr-app.env
+      - docker-compose config -q
+
+---
+kind: pipeline
+type: docker
+name: build
+
+depends_on:
+  - validate
+
+steps:
+  - name: publish
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker-registry-username
+      password:
+        from_secret: docker-registry-password
+      registry: docker-registry.theautomation.nl
+      repo: docker-registry.theautomation.nl/coen/prd-${DRONE_REPO_NAME}-app
+      auto_tag: true
+
+---
+kind: pipeline
+type: docker
+name: upgrade
+
+depends_on:
+  - build
+
+steps:
+  - name: upgrade
+    image: appleboy/drone-ssh
+    settings:
+      host: docker.stam.lan
+      username: coen
+      password:
+        from_secret: ssh_password
+      port: 22
+      script:
+        - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
+        - git pull
+        - docker-compose pull
+
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host: docker.stam.lan
+      username: coen
+      password:
+        from_secret: ssh_password
+      port: 22
+      script:
+        - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
+        - docker-compose up -d
+
+  - name: clean
+    image: appleboy/drone-ssh
+    settings:
+      host: docker.stam.lan
+      username: coen
+      password:
+        from_secret: ssh_password
+      port: 22
+      script:
+        - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
+        - docker image prune -f
