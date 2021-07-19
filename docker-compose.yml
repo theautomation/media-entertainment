@@ -12,7 +12,7 @@ services:
     networks:
       home-services:
     volumes:
-      - ./config:/config
+      - ./config/bazarr:/config
       - /mnt/slow-storage/temp/downloads/media/movies:/movies
       - /mnt/slow-storage/temp/downloads/media/series:/tv
 
@@ -26,7 +26,8 @@ services:
     networks:
       home-services:
     volumes:
-      - ./config:/config
+      - ./config/radarr:/config
+      - /mnt/slow-storage/temp/downloads/media/completed:/data/completed
       - /mnt/slow-storage/temp/downloads/media/movies:/movies
 
   prd-sonarr-app:
@@ -39,7 +40,8 @@ services:
     networks:
       home-services:
     volumes:
-      - ./config:/config
+      - ./config/sonarr:/config
+      - /mnt/slow-storage/temp/downloads/media/completed:/data/completed
       - /mnt/slow-storage/temp/downloads/media/series:/tv
 
 # NETWORKS
