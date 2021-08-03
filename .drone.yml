@@ -32,7 +32,7 @@ steps:
         from_secret: docker-registry-password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-bazarr-app
-      dockerfile: Dockerfile-bazarr
+      dockerfile: bazarr.dockerfile
       auto_tag: true
 
   - name: publish radarr
@@ -44,7 +44,7 @@ steps:
         from_secret: docker-registry-password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-radarr-app
-      dockerfile: Dockerfile-radarr
+      dockerfile: radarr.dockerfile
       auto_tag: true
 
   - name: publish sonarr
@@ -56,7 +56,7 @@ steps:
         from_secret: docker-registry-password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-sonarr-app
-      dockerfile: Dockerfile-sonarr
+      dockerfile: sonarr.dockerfile
       auto_tag: true
 
 ---
