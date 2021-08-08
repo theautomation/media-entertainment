@@ -7,8 +7,6 @@ services:
     container_name: prd-bazarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
-    ports:
-      - 6767:6767
     networks:
       home-services:
     volumes:
@@ -21,8 +19,6 @@ services:
     container_name: prd-radarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
-    ports:
-      - 7878:7878
     networks:
       home-services:
     volumes:
@@ -35,8 +31,6 @@ services:
     container_name: prd-sonarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
-    ports:
-      - 8989:8989
     networks:
       home-services:
     volumes:
