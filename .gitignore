@@ -1,2 +1,2 @@
-prd-bazarr-app.env
+*.env
 /config/

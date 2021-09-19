@@ -59,6 +59,18 @@ steps:
       dockerfile: sonarr.dockerfile
       auto_tag: true
 
+  - name: publish jackett
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker-registry-username
+      password:
+        from_secret: docker-registry-password
+      registry: docker-registry.theautomation.nl
+      repo: docker-registry.theautomation.nl/coen/prd-jackett-app
+      dockerfile: jackett.dockerfile
+      auto_tag: true
+
 ---
 kind: pipeline
 type: docker

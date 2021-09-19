@@ -38,6 +38,17 @@ services:
       - /mnt/slow-storage/temp/downloads/media/completed:/data/completed
       - /mnt/slow-storage/temp/downloads/media/series:/tv
 
+  prd-jackett-app:
+    image: docker-registry.theautomation.nl/coen/prd-jackett-app:latest
+    container_name: prd-jackett-app
+    restart: unless-stopped
+    env_file: prd-jackett-app.env
+    networks:
+      home-services:
+    volumes:
+      - ./config/jackett:/config
+      - /mnt/slow-storage/temp/downloads/media/jackett:/downloads
+
 # NETWORKS
 networks:
 
