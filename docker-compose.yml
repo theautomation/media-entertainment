@@ -45,6 +45,8 @@ services:
     env_file: prd-jackett-app.env
     networks:
       home-services:
+    ports:
+      - 9117:9117
     volumes:
       - ./config/jackett:/config
       - /mnt/slow-storage/temp/downloads/media/jackett:/downloads
