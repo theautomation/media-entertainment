@@ -12,6 +12,7 @@ steps:
     image: tmaier/docker-compose:latest
     commands:
       - mv prd-bazarr-app.env.example prd-bazarr-app.env
+      - mv prd-jackett-app.env.example prd-jackett-app.env
       - docker-compose config -q
 
 ---
