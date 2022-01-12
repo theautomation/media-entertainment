@@ -1,7 +1,7 @@
 FROM ghcr.io/linuxserver/radarr:latest
 
 RUN apt-get update && apt-get install -y \
-    xml-twig-tools -y
+  xml-twig-tools -y
 
 WORKDIR /app/radarr/bin
 COPY healthcheck/healthcheck_radarr.sh .

@@ -7,6 +7,8 @@ services:
     container_name: prd-bazarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
+    ports:
+      - 6767:6767
     networks:
       - reverse-proxy
     volumes:
@@ -19,6 +21,8 @@ services:
     container_name: prd-radarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
+    ports:
+      - 7878:7878
     networks:
       - reverse-proxy
       - transmission-openvpn
@@ -33,6 +37,8 @@ services:
     container_name: prd-sonarr-app
     restart: unless-stopped
     env_file: prd-bazarr-app.env
+    ports:
+      - 8989:8989
     networks:
       - reverse-proxy
       - transmission-openvpn
@@ -47,6 +53,8 @@ services:
     container_name: prd-jackett-app
     restart: unless-stopped
     env_file: prd-jackett-app.env
+    ports:
+      - 9117:9117
     networks:
       - reverse-proxy
     volumes:
