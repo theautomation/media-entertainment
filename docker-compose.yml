@@ -11,8 +11,8 @@ services:
       - reverse-proxy
     volumes:
       - ./config/bazarr:/config
-      - /mnt/slow-storage/temp/downloads/media/movies:/movies
-      - /mnt/slow-storage/temp/downloads/media/series:/tv
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/movies:/movies
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/series:/tv
 
   prd-radarr-app:
     image: docker-registry.theautomation.nl/coen/prd-radarr-app:latest
@@ -25,8 +25,8 @@ services:
       - node-red
     volumes:
       - ./config/radarr:/config
-      - /mnt/slow-storage/temp/downloads/media/completed:/data/completed
-      - /mnt/slow-storage/temp/downloads/media/movies:/movies
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/completed:/data/completed
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/movies:/movies
 
   prd-sonarr-app:
     image: docker-registry.theautomation.nl/coen/prd-sonarr-app:latest
@@ -39,8 +39,8 @@ services:
       - node-red
     volumes:
       - ./config/sonarr:/config
-      - /mnt/slow-storage/temp/downloads/media/completed:/data/completed
-      - /mnt/slow-storage/temp/downloads/media/series:/tv
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/completed:/data/completed
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/series:/tv
 
   prd-jackett-app:
     image: docker-registry.theautomation.nl/coen/prd-jackett-app:latest
@@ -51,7 +51,7 @@ services:
       - reverse-proxy
     volumes:
       - ./config/jackett:/config
-      - /mnt/slow-storage/temp/downloads/media/jackett:/downloads
+      - /mnt/R10_S8TB_C120GB/temp/downloads/media/jackett:/downloads
 
 networks:
   transmission-openvpn:
