@@ -10,7 +10,7 @@ services:
     ports:
       - 6767:6767
     networks:
-      - reverse-proxy
+      - transmission-openvpn
     volumes:
       - ./config/bazarr:/config
       - /mnt/R10_S8TB_C120GB/temp/downloads/media/movies:/movies
@@ -24,7 +24,6 @@ services:
     ports:
       - 7878:7878
     networks:
-      - reverse-proxy
       - transmission-openvpn
       - node-red
     volumes:
@@ -40,7 +39,6 @@ services:
     ports:
       - 8989:8989
     networks:
-      - reverse-proxy
       - transmission-openvpn
       - node-red
     volumes:
@@ -56,7 +54,7 @@ services:
     ports:
       - 9117:9117
     networks:
-      - reverse-proxy
+      - transmission-openvpn
     volumes:
       - ./config/jackett:/config
       - /mnt/R10_S8TB_C120GB/temp/downloads/media/jackett:/downloads
@@ -64,7 +62,5 @@ services:
 networks:
   transmission-openvpn:
     name: transmission-openvpn
-  reverse-proxy:
-    name: reverse-proxy
   node-red:
     name: node-red
