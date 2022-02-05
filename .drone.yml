@@ -12,7 +12,7 @@ steps:
     image: tmaier/docker-compose:latest
     commands:
       - mv prd-bazarr-app.env.example prd-bazarr-app.env
-      - mv prd-jackett-app.env.example prd-jackett-app.env
+      - mv prd-prowlarr-app.env.example prd-prowlarr-app.env
       - docker-compose config -q
 
 ---
@@ -60,7 +60,7 @@ steps:
       dockerfile: sonarr.dockerfile
       auto_tag: true
 
-  - name: publish jackett
+  - name: publish prowlarr
     image: plugins/docker
     settings:
       username:
@@ -68,8 +68,8 @@ steps:
       password:
         from_secret: docker-registry-password
       registry: docker-registry.theautomation.nl
-      repo: docker-registry.theautomation.nl/coen/prd-jackett-app
-      dockerfile: jackett.dockerfile
+      repo: docker-registry.theautomation.nl/coen/prd-prowlarr-app
+      dockerfile: prowlarr.dockerfile
       auto_tag: true
 
 ---
