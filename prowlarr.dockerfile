@@ -1,1 +1,1 @@
-FROM linuxserver/prowlarr:nightly-alpine
+FROM linuxserver/prowlarr:nightly
