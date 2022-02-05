@@ -13,8 +13,8 @@ services:
       - transmission-openvpn
     volumes:
       - ./config/bazarr:/config
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/movies:/movies
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/series:/tv
+      - movies:/movies
+      - series:/tv
 
   prd-radarr-app:
     image: docker-registry.theautomation.nl/coen/prd-radarr-app:latest
@@ -28,8 +28,8 @@ services:
       - node-red
     volumes:
       - ./config/radarr:/config
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/completed:/data/completed
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/movies:/movies
+      - completed:/data/completed
+      - movies:/movies
 
   prd-sonarr-app:
     image: docker-registry.theautomation.nl/coen/prd-sonarr-app:latest
@@ -43,24 +43,40 @@ services:
       - node-red
     volumes:
       - ./config/sonarr:/config
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/completed:/data/completed
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/series:/tv
+      - completed:/data/completed
+      - series:/tv
 
-  prd-jackett-app:
-    image: docker-registry.theautomation.nl/coen/prd-jackett-app:latest
-    container_name: prd-jackett-app
+  prd-prowlarr-app:
+    image: docker-registry.theautomation.nl/coen/prd-prowlarr-app:latest
+    container_name: prd-prowlarr-app
     restart: unless-stopped
-    env_file: prd-jackett-app.env
+    env_file: prd-prowlarr-app.env
     ports:
       - 9117:9117
     networks:
       - transmission-openvpn
     volumes:
-      - ./config/jackett:/config
-      - /mnt/R10_S8TB_C120GB/temp/downloads/media/jackett:/downloads
+      - ./config/prowlarr:/config
 
 networks:
   transmission-openvpn:
     name: transmission-openvpn
   node-red:
     name: node-red
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=storage-server.lan,nolock,soft,rw,nfsvers=4"
+      device: ":/r10_8tb/downloads/media/movies"
+  series:
+    driver_opts:
+      type: "nfs"
+      o: "addr=storage-server.lan,nolock,soft,rw,nfsvers=4"
+      device: ":/r10_8tb/downloads/media/series"
+  completed:
+    driver_opts:
+      type: "nfs"
+      o: "addr=storage-server.lan,nolock,soft,rw,nfsvers=4"
+      device: ":/r10_8tb/downloads/media/completed"
