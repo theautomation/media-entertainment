@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
     env_file: prd-prowlarr-app.env
     ports:
-      - 9117:9117
+      - 9696:9696
     networks:
       - transmission-openvpn
     volumes:
