@@ -28,49 +28,53 @@ steps:
     image: plugins/docker
     settings:
       username:
-        from_secret: docker-registry-username
+        from_secret: docker_registry_username
       password:
-        from_secret: docker-registry-password
+        from_secret: docker_registry_password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-bazarr-app
       dockerfile: bazarr.dockerfile
-      auto_tag: true
+      tags:
+        - latest
 
   - name: publish radarr
     image: plugins/docker
     settings:
       username:
-        from_secret: docker-registry-username
+        from_secret: docker_registry_username
       password:
-        from_secret: docker-registry-password
+        from_secret: docker_registry_password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-radarr-app
       dockerfile: radarr.dockerfile
-      auto_tag: true
+      tags:
+        - latest
 
   - name: publish sonarr
     image: plugins/docker
     settings:
       username:
-        from_secret: docker-registry-username
+        from_secret: docker_registry_username
       password:
-        from_secret: docker-registry-password
+        from_secret: docker_registry_password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-sonarr-app
       dockerfile: sonarr.dockerfile
-      auto_tag: true
+      tags:
+        - latest
 
   - name: publish prowlarr
     image: plugins/docker
     settings:
       username:
-        from_secret: docker-registry-username
+        from_secret: docker_registry_username
       password:
-        from_secret: docker-registry-password
+        from_secret: docker_registry_password
       registry: docker-registry.theautomation.nl
       repo: docker-registry.theautomation.nl/coen/prd-prowlarr-app
       dockerfile: prowlarr.dockerfile
-      auto_tag: true
+      tags:
+        - latest
 
 ---
 kind: pipeline
@@ -83,41 +87,57 @@ depends_on:
 steps:
   - name: upgrade
     image: appleboy/drone-ssh
+    environment:
+      DOCKER_REGISTRY_USERNAME:
+        from_secret: docker_registry_username
+      DOCKER_REGISTRY_PASSWORD:
+        from_secret: docker_registry_password
     settings:
-      host: docker-host.lan
-      username: coen
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_user
       password:
         from_secret: ssh_password
       port: 22
+      envs:
+        - docker_registry_password
+        - docker_registry_username
+      script_stop: true
       script:
         - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
         - git pull
+        - docker login docker-registry.theautomation.nl -u $${DOCKER_REGISTRY_USERNAME} -p $${DOCKER_REGISTRY_PASSWORD}
         - docker-compose pull
+        - docker logout docker-registry.theautomation.nl
 
   - name: deploy
     image: appleboy/drone-ssh
     settings:
-      host: docker-host.lan
-      username: coen
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_user
       password:
         from_secret: ssh_password
       port: 22
       script:
         - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
-        - docker-compose up -d
+        - docker-compose up -d --force-recreate
 
   - name: clean
     image: appleboy/drone-ssh
     settings:
-      host: docker-host.lan
-      username: coen
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_user
       password:
         from_secret: ssh_password
       port: 22
       script:
         - cd /home/coen/docker-home-services/${DRONE_REPO_NAME}/
         - docker image prune -f
-
 ---
 kind: pipeline
 name: notify webhook
