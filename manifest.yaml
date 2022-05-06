@@ -2,19 +2,17 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-iscsi-radarr-config
+  name: pvc-nfs-downloads
   namespace: media
-  labels:
-    app: radarr
   annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
 spec:
-  storageClassName: freenas-iscsi-csi
+  storageClassName: freenas-nfs-csi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 200Gi
 
 ---
 kind: PersistentVolumeClaim
@@ -31,6 +29,24 @@ spec:
   resources:
     requests:
       storage: 500Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-iscsi-radarr-config
+  namespace: media
+  labels:
+    app: radarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+spec:
+  storageClassName: freenas-iscsi-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 
 ---
 kind: Deployment
@@ -99,11 +115,16 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 5
           volumeMounts:
+            - name: downloads
+              mountPath: /data/downloads
             - name: media
-              mountPath: /media
+              mountPath: /data/media
             - name: radarr-config
               mountPath: /config
       volumes:
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: pvc-nfs-downloads
         - name: media
           persistentVolumeClaim:
             claimName: pvc-nfs-media
