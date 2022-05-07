@@ -34,6 +34,42 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: pvc-iscsi-prowlarr-config
+  namespace: media
+  labels:
+    app: prowlarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+spec:
+  storageClassName: freenas-iscsi-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-iscsi-sonarr-config
+  namespace: media
+  labels:
+    app: sonarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+spec:
+  storageClassName: freenas-iscsi-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
   name: pvc-iscsi-radarr-config
   namespace: media
   labels:
@@ -52,11 +88,158 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  name: prowlarr
+  namespace: media
+  labels:
+    app: prowlarr
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      containers:
+        - name: prowlarr
+          image: lscr.io/linuxserver/prowlarr:amd64-nightly
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "TZ"
+              value: "Europe/Amsterdam"
+          ports:
+            - name: http
+              containerPort: 9696
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 9696
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 9696
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 9696
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+          volumeMounts:
+            - name: prowlarr-config
+              mountPath: /config
+      volumes:
+        - name: prowlarr-config
+          persistentVolumeClaim:
+            claimName: pvc-iscsi-prowlarr-config
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sonarr
+  namespace: media
+  labels:
+    app: sonarr
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:amd64-latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "TZ"
+              value: "Europe/Amsterdam"
+          ports:
+            - name: http
+              containerPort: 8989
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - /usr/bin/env
+                - bash
+                - -c
+                - curl --fail localhost:8989/api/v3/system/status?apiKey=`IFS=\> && while read -d
+                  \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+            failureThreshold: 5
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8989
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 8989
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+          volumeMounts:
+            - name: downloads
+              mountPath: /data/downloads
+            - name: media
+              mountPath: /data/media
+            - name: sonarr-config
+              mountPath: /config
+      volumes:
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: pvc-nfs-downloads
+        - name: media
+          persistentVolumeClaim:
+            claimName: pvc-nfs-media
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: pvc-iscsi-sonarr-config
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
   name: radarr
   namespace: media
   labels:
     app: radarr
 spec:
+  revisionHistoryLimit: 3
   replicas: 1
   strategy:
     type: Recreate
@@ -77,10 +260,6 @@ spec:
           image: linuxserver/radarr:amd64-latest
           imagePullPolicy: Always
           env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
             - name: "TZ"
               value: "Europe/Amsterdam"
           ports:
@@ -136,6 +315,42 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: prowlarr
+  namespace: media
+  labels:
+    app: prowlarr
+spec:
+  selector:
+    app: prowlarr
+  type: ClusterIP
+  ports:
+    - port: 9696
+      targetPort: http
+      protocol: TCP
+      name: http
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sonarr
+  namespace: media
+  labels:
+    app: sonarr
+spec:
+  selector:
+    app: sonarr
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8989
+      targetPort: http
+
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: radarr
   namespace: media
   labels:
@@ -149,6 +364,54 @@ spec:
       protocol: TCP
       port: 7878
       targetPort: http
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: prowlarr
+  namespace: media
+  labels:
+    app: prowlarr
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx-private
+  rules:
+    - host: prowlarr.k8s.lan
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: prowlarr
+                port:
+                  number: 9696
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: sonarr
+  namespace: media
+  labels:
+    app: sonarr
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx-private
+  rules:
+    - host: sonarr.k8s.lan
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr
+                port:
+                  number: 8989
 
 ---
 kind: Ingress
