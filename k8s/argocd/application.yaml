@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/theautomation/arrs.git
-    targetRevision: HEAD
+    targetRevision: k8s
     path: k8s/manifest
     directory:
       recurse: true
