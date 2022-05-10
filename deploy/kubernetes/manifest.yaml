@@ -2,6 +2,23 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: pvc-nfs-downloads
+  namespace: media
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
+spec:
+  storageClassName: freenas-nfs-csi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+  volumeName: pvc-d840dcd4-a1d8-4965-b971-59446c3cb714
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
   name: pvc-nfs-media
   namespace: media
   annotations:
@@ -109,6 +126,111 @@ spec:
     requests:
       storage: 1Gi
   volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
+
+# ---
+# kind: Secret
+# apiVersion: v1
+# metadata:
+#   name: transmission-vpn-cred
+#   namespace: media
+#   labels:
+#     app: transmission
+# type: Opaque
+# data:
+#   OPENVPN_USERNAME: <REDACTED>
+#   OPENVPN_PASSWORD: <REDACTED>
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: transmission-config
+  namespace: media
+  labels:
+    app: transmission
+data:
+  LOCAL_NETWORK: 192.168.1.240/32, 192.168.10.0/24, 172.16.16.0/24
+  NORDVPN_CATEGORY: p2p
+  NORDVPN_COUNTRY: NL
+  NORDVPN_PROTOCOL: tcp
+  OPENVPN_OPTS: --inactive 3600 --ping 10 --ping-exit 60
+  OPENVPN_PROVIDER: NORDVPN
+  TRANSMISSION_DOWNLOAD_DIR: /data/completed
+  TRANSMISSION_INCOMPLETE_DIR: /data/incomplete
+  TRANSMISSION_WATCH_DIR: /data/watch
+  TRANSMISSION_DOWNLOAD_QUEUE_SIZE: "4"
+  TZ: Europe/Amsterdam
+  WEBPROXY_ENABLED: "false"
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: transmission
+  namespace: media
+  labels:
+    app: transmission
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      containers:
+        - name: transmission
+          image: haugene/transmission-openvpn:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: transmission-config
+                optional: false
+            - secretRef:
+                name: transmission-vpn-cred
+                optional: false
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 9091
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            tcpSocket:
+              port: 9091
+            timeoutSeconds: 2
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+                - NET_ADMIN
+            privileged: true
+          volumeMounts:
+            - mountPath: /data/
+              name: transmission-data
+            - mountPath: /dev/net/tun
+              name: tunnel
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: transmission-data
+          persistentVolumeClaim:
+            claimName: pvc-nfs-downloads
+        - hostPath:
+            path: /dev/net/tun
+            type: ""
+          name: tunnel
 
 ---
 kind: Deployment
@@ -472,6 +594,24 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: transmission
+  namespace: media
+  labels:
+    app: transmission
+spec:
+  selector:
+    app: transmission
+  type: ClusterIP
+  ports:
+    - port: 9091
+      protocol: TCP
+      targetPort: 9091
+  sessionAffinity: None
+
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: jellyfin
   namespace: media
   labels:
@@ -557,6 +697,30 @@ spec:
       protocol: TCP
       port: 7878
       targetPort: http
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: transmission
+  namespace: media
+  labels:
+    app: transmission
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx-private
+  rules:
+    - host: transmission.k8s.lan
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: transmission
+                port:
+                  number: 9091
 
 ---
 kind: Ingress
