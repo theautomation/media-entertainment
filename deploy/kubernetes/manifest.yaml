@@ -52,6 +52,24 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: pvc-iscsi-bazarr-config
+  namespace: media
+  labels:
+    app: bazarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+spec:
+  storageClassName: freenas-iscsi-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
   name: pvc-iscsi-sonarr-config
   namespace: media
   labels:
@@ -152,6 +170,78 @@ spec:
         - name: prowlarr-config
           persistentVolumeClaim:
             claimName: pvc-iscsi-prowlarr-config
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bazarr
+  namespace: media
+  labels:
+    app: bazarr
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      containers:
+        - name: bazarr
+          image: lscr.io/linuxserver/bazarr:amd64-latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Amsterdam"
+          ports:
+            - name: http
+              containerPort: 6767
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+          volumeMounts:
+            - name: bazarr-config
+              mountPath: /config
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: pvc-nfs-media
+        - name: bazarr-config
+          persistentVolumeClaim:
+            claimName: pvc-iscsi-bazarr-config
 
 ---
 kind: Deployment
@@ -345,6 +435,24 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: bazarr
+  namespace: media
+  labels:
+    app: bazarr
+spec:
+  selector:
+    app: bazarr
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 6767
+      targetPort: http
+
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: sonarr
   namespace: media
   labels:
@@ -400,6 +508,30 @@ spec:
                 name: prowlarr
                 port:
                   number: 9696
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: bazarr
+  namespace: media
+  labels:
+    app: bazarr
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx-private
+  rules:
+    - host: bazarr.k8s.lan
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: bazarr
+                port:
+                  number: 6767
 
 ---
 kind: Ingress
