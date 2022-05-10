@@ -108,7 +108,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: pvc-9e90d951-f2c1-46e6-acbd-bdc01eb4bc54
+  volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
 
 ---
 kind: Deployment
