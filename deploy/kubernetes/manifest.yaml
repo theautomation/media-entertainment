@@ -2,22 +2,6 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-nfs-downloads
-  namespace: media
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
-spec:
-  storageClassName: freenas-nfs-csi
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 200Gi
-
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
   name: pvc-nfs-media
   namespace: media
   annotations:
@@ -29,6 +13,24 @@ spec:
   resources:
     requests:
       storage: 500Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-iscsi-jellyfin-config
+  namespace: media
+  labels:
+    app: jellyfin
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+spec:
+  storageClassName: freenas-iscsi-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 
 ---
 kind: PersistentVolumeClaim
@@ -101,6 +103,53 @@ spec:
   resources:
     requests:
       storage: 1Gi
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: jellyfin
+  namespace: media
+  labels:
+    app: jellyfin
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      containers:
+        - name: jellyfin
+          image: jellyfin/jellyfin:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8096
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /media
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: pvc-iscsi-jellyfin-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: pvc-nfs-media
 
 ---
 kind: Deployment
@@ -417,6 +466,24 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: jellyfin
+  namespace: media
+  labels:
+    app: jellyfin
+spec:
+  selector:
+    app: jellyfin
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8096
+      protocol: TCP
+      targetPort: http
+
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: prowlarr
   namespace: media
   labels:
@@ -484,6 +551,31 @@ spec:
       protocol: TCP
       port: 7878
       targetPort: http
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: jellyfin
+  namespace: media
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  labels:
+    app: jellyfin
+spec:
+  ingressClassName: nginx-private
+  rules:
+    - host: jellyfin.k8s.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  name: http
 
 ---
 kind: Ingress
