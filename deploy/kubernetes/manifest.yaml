@@ -13,6 +13,7 @@ spec:
   resources:
     requests:
       storage: 500Gi
+  volumeName: pvc-643a415e-bc02-4d98-b454-21e45ed0c5d6
 
 ---
 kind: PersistentVolumeClaim
@@ -31,6 +32,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  volumeName: pvc-ca85bfba-18eb-4c87-a398-dd5c9f179bfa
 
 ---
 kind: PersistentVolumeClaim
@@ -49,6 +51,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  volumeName: pvc-2be70d06-3f0a-48e8-9bf0-56441b0c77fb
 
 ---
 kind: PersistentVolumeClaim
@@ -67,6 +70,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeName: pvc-19db5bc4-e5ec-4cef-af0c-58aadae064ea
 
 ---
 kind: PersistentVolumeClaim
@@ -85,6 +89,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeName: pvc-d5dbce59-f98e-4c4d-8539-bd643f60cbb3
 
 ---
 kind: PersistentVolumeClaim
@@ -103,6 +108,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeName: pvc-9e90d951-f2c1-46e6-acbd-bdc01eb4bc54
 
 ---
 kind: Deployment
