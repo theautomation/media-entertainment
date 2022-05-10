@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/theautomation/arrs.git
-    targetRevision: k8s
+    targetRevision: HEAD
     path: deploy/kubernetes
     directory:
       recurse: true
