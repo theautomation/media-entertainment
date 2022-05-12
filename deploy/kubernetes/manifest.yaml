@@ -187,6 +187,7 @@ spec:
         - name: transmission
           image: haugene/transmission-openvpn:latest
           imagePullPolicy: Always
+          resources: {}
           envFrom:
             - configMapRef:
                 name: transmission-config
@@ -256,6 +257,7 @@ spec:
         - name: jellyfin
           image: jellyfin/jellyfin:latest
           imagePullPolicy: Always
+          resources: {}
           ports:
             - name: http
               containerPort: 8096
@@ -308,6 +310,7 @@ spec:
         - name: prowlarr
           image: lscr.io/linuxserver/prowlarr:amd64-nightly
           imagePullPolicy: IfNotPresent
+          resources: {}
           env:
             - name: PUID
               value: "1000"
@@ -377,6 +380,7 @@ spec:
         - name: bazarr
           image: lscr.io/linuxserver/bazarr:amd64-latest
           imagePullPolicy: IfNotPresent
+          resources: {}
           env:
             - name: PUID
               value: "1000"
@@ -449,6 +453,7 @@ spec:
         - name: sonarr
           image: linuxserver/sonarr:amd64-latest
           imagePullPolicy: IfNotPresent
+          resources: {}
           env:
             - name: PUID
               value: "1000"
@@ -534,6 +539,7 @@ spec:
         - name: radarr
           image: linuxserver/radarr:amd64-latest
           imagePullPolicy: Always
+          resources: {}
           env:
             - name: PUID
               value: "1000"
