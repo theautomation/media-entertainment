@@ -414,6 +414,8 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 5
           volumeMounts:
+            - name: media
+              mountPath: /data/media
             - name: bazarr-config
               mountPath: /config
       volumes:
