@@ -20,7 +20,7 @@ This repository contains a full media-entertaiment application stack running in 
 
 ## Folder Structure Conventions     
 
-    ├── ...
+    
     ├── cicd   
     │   ├── argocd             # GitOps Argo continuous delivery application yaml('s)
     │   ├── tekton             # Tekton continuous intergration pipeline yaml('s)
@@ -28,4 +28,4 @@ This repository contains a full media-entertaiment application stack running in 
     │   ├── kubernetes         # K8s manifest yaml('s)
     │   ├── docker             # Dockefile(s) to build container image(s)
     ├── src                    # Application source code
-    └── ...
+    
