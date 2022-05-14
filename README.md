@@ -8,7 +8,7 @@ This repository contains a full media-entertaiment application stack running in 
 
 [Transmission](https://transmissionbt.com/): Torrent download client with OpenVPN where Transmission is running only when OpenVPN has an active tunnel.
 
-[Jellyfin](https://jellyfin.org/): a multimedia applications designed to organize, manage, and stream digital media files to networked devices.\
+[Jellyfin](https://jellyfin.org/): a multimedia applications designed to organize, manage, and stream digital media files to networked devices.
 
 [Prowlarr](https://github.com/Prowlarr/Prowlarr/): Prowlarr is an indexer manager/proxy base stack offering complete management of torrent indexers with no per app indexer setup required.
 
