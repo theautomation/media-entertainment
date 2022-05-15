@@ -25,7 +25,7 @@ This repository contains a full media-entertaiment application stack running in 
     │   ├── argocd             # GitOps Argo continuous delivery application yaml('s)
     │   ├── tekton             # Tekton continuous intergration pipeline yaml('s)
     ├── deploy                 
-    │   ├── kubernetes         # K8s manifest yaml('s)
+    │   ├── k8s                # Kubernetes manifest yaml('s)
     │   ├── docker             # Dockefile(s) to build container image(s)
     ├── src                    # Application source code
     
