@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/theautomation/media-entertainment.git
     targetRevision: main
-    path: deploy/kubernetes
+    path: deploy/k8s
     directory:
       recurse: true
   destination:
