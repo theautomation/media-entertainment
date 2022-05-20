@@ -4,6 +4,8 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/theautomation/media-entertainment?logo=github)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/theautomation/media-entertainment/main?logo=github)
 
+Applications running in Kubernetes <img src="/assets/img/k8s.png" alt="K8s" style="height: 50px; width:50px;"/>
+
 This repository contains a full media-entertaiment application stack running in my Kubernetes cluster. 
 
 [Transmission](https://transmissionbt.com/): Torrent download client with OpenVPN where Transmission is running only when OpenVPN has an active tunnel.
