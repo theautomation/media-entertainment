@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: media-entertainment
   namespace: argocd
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: cicd
 spec:
   project: default
   source:
