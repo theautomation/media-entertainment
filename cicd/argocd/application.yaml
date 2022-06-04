@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: media-entertainment
-  namespace: argocd
+  namespace: devops
   annotations:
     notifications.argoproj.io/subscribe.on-sync-succeeded.slack: cicd
 spec:
