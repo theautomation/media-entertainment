@@ -1,661 +1,784 @@
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-nfs-downloads
-  namespace: media
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
-spec:
-  storageClassName: freenas-nfs-csi
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 200Gi
-  # volumeName: pvc-d840dcd4-a1d8-4965-b971-59446c3cb714
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pv-nfs-downloads
+# spec:
+#   storageClassName: "freenas-nfs-manual-csi"
+#   capacity:
+#     storage: 200Gi
+#   accessModes:
+#     - ReadWriteMany
+#   persistentVolumeReclaimPolicy: Delete
+#   mountOptions:
+#     - nfsvers=4
+#     - nolock
+#     - noatime
+#   csi:
+#     driver: org.democratic-csi.node-manual
+#     readOnly: false
+#     fsType: nfs
+#     volumeHandle: pv-nfs-downloads
+#     volumeAttributes:
+#       server: storage-server.lan
+#       share: /mnt/r10_8tb/media/downloads
+#       node_attach_driver: nfs
+#       provisioner_driver: node-manual
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-nfs-media
-  namespace: media
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
-spec:
-  storageClassName: freenas-nfs-csi
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 500Gi
-  # volumeName: pvc-643a415e-bc02-4d98-b454-21e45ed0c5d6
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pv-nfs-media
+# spec:
+#   storageClassName: "freenas-nfs-manual-csi"
+#   capacity:
+#     storage: 500Gi
+#   accessModes:
+#     - ReadWriteMany
+#   persistentVolumeReclaimPolicy: Retain
+#   mountOptions:
+#     - nfsvers=4
+#     - nolock
+#     - noatime
+#   csi:
+#     driver: org.democratic-csi.node-manual
+#     readOnly: false
+#     fsType: nfs
+#     volumeHandle: pv-nfs-media
+#     volumeAttributes:
+#       server: storage-server.lan
+#       share: /mnt/r10_8tb/media/
+#       node_attach_driver: nfs
+#       provisioner_driver: node-manual
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-iscsi-jellyfin-config
-  namespace: media
-  labels:
-    app: jellyfin
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-spec:
-  storageClassName: freenas-iscsi-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  # volumeName: pvc-ca85bfba-18eb-4c87-a398-dd5c9f179bfa
+# ---
+# kind: PersistentVolume
+# apiVersion: v1
+# metadata:
+#   name: pv-iscsi-jellyfin-config
+# spec:
+#   storageClassName: "freenas-iscsi-manual-csi"
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   csi:
+#     driver: org.democratic-csi.node-manual
+#     readOnly: false
+#     fsType: xfs
+#     volumeHandle: pv-iscsi-jellyfin-config
+#     volumeAttributes:
+#       portal: storage-server.lan:3260
+#       iqn: iqn.2005-10.org.freenas.ctl:jellyfin-config
+#       lun: "0"
+#       node_attach_driver: iscsi
+#       provisioner_driver: node-manual
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-iscsi-prowlarr-config
-  namespace: media
-  labels:
-    app: prowlarr
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-spec:
-  storageClassName: freenas-iscsi-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  # volumeName: pvc-2be70d06-3f0a-48e8-9bf0-56441b0c77fb
+# ---
+# kind: PersistentVolume
+# apiVersion: v1
+# metadata:
+#   name: pv-iscsi-prowlarr-config
+# spec:
+#   storageClassName: "freenas-iscsi-manual-csi"
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   csi:
+#     driver: org.democratic-csi.node-manual
+#     readOnly: false
+#     fsType: xfs
+#     volumeHandle: pv-iscsi-prowlarr-config
+#     volumeAttributes:
+#       portal: storage-server.lan:3260
+#       iqn: iqn.2005-10.org.freenas.ctl:prowlarr-config
+#       lun: "0"
+#       node_attach_driver: iscsi
+#       provisioner_driver: node-manual
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-iscsi-bazarr-config
-  namespace: media
-  labels:
-    app: bazarr
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-spec:
-  storageClassName: freenas-iscsi-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  # volumeName: pvc-19db5bc4-e5ec-4cef-af0c-58aadae064ea
+# ---
+# kind: PersistentVolume
+# apiVersion: v1
+# metadata:
+#   name: pv-iscsi-bazarr-config
+# spec:
+#   storageClassName: "freenas-iscsi-manual-csi"
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   csi:
+#     driver: org.democratic-csi.node-manual
+#     readOnly: false
+#     fsType: xfs
+#     volumeHandle: pv-iscsi-bazarr-config
+#     volumeAttributes:
+#       portal: storage-server.lan:3260
+#       iqn: iqn.2005-10.org.freenas.ctl:bazarr-config
+#       lun: "0"
+#       node_attach_driver: iscsi
+#       provisioner_driver: node-manual
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-iscsi-sonarr-config
-  namespace: media
-  labels:
-    app: sonarr
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-spec:
-  storageClassName: freenas-iscsi-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  # volumeName: pvc-d5dbce59-f98e-4c4d-8539-bd643f60cbb3
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-nfs-downloads
+#   namespace: media
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-nfs-manual-csi"
+# spec:
+#   storageClassName: freenas-nfs-manual-csi
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 200Gi
+#   volumeName: pv-nfs-downloads
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-iscsi-radarr-config
-  namespace: media
-  labels:
-    app: radarr
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-spec:
-  storageClassName: freenas-iscsi-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  # volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-nfs-media
+#   namespace: media
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-nfs-manual-csi"
+# spec:
+#   storageClassName: freenas-nfs-manual-csi
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 500Gi
+#   volumeName: pv-nfs-media
 
----
-kind: SealedSecret
-apiVersion: bitnami.com/v1alpha1
-metadata:
-  name: transmission-vpn-cred
-  namespace: media
-spec:
-  encryptedData:
-    OPENVPN_PASSWORD: AgAP81dCkxit6aOOXu9EH1asYKa7DR4N4+LfTSeVoNVUr8ohlIz6NGQjaIEhPCteZKskH8E1F44x6XyT1Kh93r91YhHfyuadiAZ42AYiedgmFw1tdF7OPx3DzNt+9V3YJVT4GBicaHzxyc9AGgGr/DSF09pxKQVdi/QsOb+fBoNWyKTEcEUQZhlO4mDGS39oGjuNeC9aLKCbZ38YnnjGTgxPxMih8dQI2kmfYvVkcStDMwb1alagCwh7e/9agm0IRMLxergfuoIRinLM8JXV4py7KhlqSWgBvZbIu417eqmg/FDKXvUy+wJMs22ch4erB4iX36QnNxJ1R6l7uj0goe9wGvkpdqnKDUqOrs77LrT1cYkrlA6asLAxB3JoU0hZATmqSdKQ2iSpBMg9++QiFAGkV6nCvrgZHWp/qS9A8d8e6IuHqutuHET2vlx1Gs0PDO4yWNqY4WY7jG4zn+n6rC2KoGx7rzX9lR3w9CJ1fvOCzgtRDLwDcyDo9bMuxJnPiszOFKDtwmw6wFj7NcMyetJCIpoayLqS7CWfbgbWpk0MAa2h6w0SQu3tlftonGU2MQEsF+7gnhrTm/g3wTKjf60p0JBN3KGLvSb+vPm4za4mCQfBxru/5LVhTZRR5y/w6KJo5fUgKJ/FOWBoVrLBe1Ust8CYUUdUW0mOvEOKv/NAn7e3ndew2n0PILwmOmo1+zb7Chm49AoDusquVa7da0k=
-    OPENVPN_USERNAME: AgAP57F3U8wuz8gWAZnKzxhpT++vB6S4fuiyKptSm+YdZhbiLDHg01xX7Kwp3PaO5cp4mF62IOXq7e4bxRip/SMhs6xdlJmyOzxudiknfjcpPcfz9maeYkrdfsKujsLaPflikMvpCCP7irRt/IN4xRsK4tbKzY43HhsuKxlQnNX0Nmb0YXJJ71zEFwaTInfgBHf1xQW0L64VtNFhEJlnSrak0iM3Z5kh9Msb2d0zBazH306iARwtilo2gIVUrTytMNuxrqgNDTDQyresD5F/McttQTfsgGq9An+Z9R1SJVT9GyXVIjqy6eWzqP2uYlXG//TvIpjUpNN1iLMjoKU9nHLML1XGdQ3vQFC58+tub4d9xKp4lYbZr/V7tGotZGe9a+cn+sKmtq+NJAP5atn/6vJKiA3kNp/XLJWsvyfTtXYgf+LlfIwWt2+tbSnQDnmD+NU4VInSVWKW7oTE2XF2g6AXjL6NAVKGbR0XcZpJHjMD719fJJn0UCQTNHJxLf2lquabUiHARrBPcHjlIYp8QRMuwlEWJcz4u4DbIRjHV8UBv71g9OWXcot7Qq7sMhk5BFcPSGoKeK7UMkAPWQjY/5eqpfjaka6Mb+uo0sNwjV2j1mk4lNPKY20pNW64B09fFUNOKDE6kQKKV38M198giSGO9Zh0CvjS8NmgEgQg/jK1KqQ+YMOha2kBgd1ewISmXLDNMusuAbfbnXCIq1w8aU4RWw==
-  template:
-    type: Opaque
-    metadata:
-      name: transmission-vpn-cred
-      namespace: media
-      labels:
-        app: transmission
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-iscsi-jellyfin-config
+#   namespace: media
+#   labels:
+#     app: jellyfin
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-manual-csi"
+# spec:
+#   storageClassName: freenas-iscsi-manual-csi
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   volumeName: pv-iscsi-jellyfin-config
 
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: transmission-config
-  namespace: media
-  labels:
-    app: transmission
-data:
-  LOCAL_NETWORK: 192.168.1.240/32, 192.168.10.0/24, 172.16.16.0/24
-  NORDVPN_CATEGORY: p2p
-  NORDVPN_COUNTRY: NL
-  NORDVPN_PROTOCOL: tcp
-  OPENVPN_OPTS: --inactive 3600 --ping 10 --ping-exit 60
-  OPENVPN_PROVIDER: NORDVPN
-  TRANSMISSION_DOWNLOAD_DIR: /data/completed
-  TRANSMISSION_INCOMPLETE_DIR: /data/incomplete
-  TRANSMISSION_WATCH_DIR: /data/watch
-  TRANSMISSION_DOWNLOAD_QUEUE_SIZE: "4"
-  TZ: Europe/Amsterdam
-  WEBPROXY_ENABLED: "false"
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-iscsi-prowlarr-config
+#   namespace: media
+#   labels:
+#     app: prowlarr
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-manual-csi"
+# spec:
+#   storageClassName: freenas-iscsi-manual-csi
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   volumeName: pv-iscsi-prowlarr-config
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: transmission
-  namespace: media
-  labels:
-    app: transmission
-spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  selector:
-    matchLabels:
-      app: transmission
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: transmission
-    spec:
-      containers:
-        - name: transmission
-          image: haugene/transmission-openvpn:latest
-          imagePullPolicy: Always
-          resources: {}
-          envFrom:
-            - configMapRef:
-                name: transmission-config
-                optional: false
-            - secretRef:
-                name: transmission-vpn-cred
-                optional: false
-          livenessProbe:
-            failureThreshold: 3
-            initialDelaySeconds: 10
-            periodSeconds: 2
-            successThreshold: 1
-            tcpSocket:
-              port: 9091
-            timeoutSeconds: 2
-          readinessProbe:
-            failureThreshold: 3
-            initialDelaySeconds: 10
-            periodSeconds: 2
-            successThreshold: 2
-            tcpSocket:
-              port: 9091
-            timeoutSeconds: 2
-          securityContext:
-            allowPrivilegeEscalation: true
-            capabilities:
-              add:
-                - NET_ADMIN
-            privileged: true
-          volumeMounts:
-            - mountPath: /data/
-              name: transmission-data
-            - mountPath: /dev/net/tun
-              name: tunnel
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
-      volumes:
-        - name: transmission-data
-          persistentVolumeClaim:
-            claimName: pvc-nfs-downloads
-        - hostPath:
-            path: /dev/net/tun
-            type: ""
-          name: tunnel
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-iscsi-bazarr-config
+#   namespace: media
+#   labels:
+#     app: bazarr
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-manual-csi"
+# spec:
+#   storageClassName: freenas-iscsi-manual-csi
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   volumeName: pv-iscsi-bazarr-config
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: jellyfin
-  namespace: media
-  labels:
-    app: jellyfin
-spec:
-  strategy:
-    type: Recreate
-  replicas: 1
-  selector:
-    matchLabels:
-      app: jellyfin
-  template:
-    metadata:
-      labels:
-        app: jellyfin
-    spec:
-      containers:
-        - name: jellyfin
-          image: jellyfin/jellyfin:latest
-          imagePullPolicy: Always
-          resources: {}
-          ports:
-            - name: http
-              containerPort: 8096
-              protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: http
-          readinessProbe:
-            tcpSocket:
-              port: http
-          volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: media
-              mountPath: /media
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: pvc-iscsi-jellyfin-config
-        - name: media
-          persistentVolumeClaim:
-            claimName: pvc-nfs-media
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-iscsi-sonarr-config
+#   namespace: media
+#   labels:
+#     app: sonarr
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+# spec:
+#   storageClassName: freenas-iscsi-csi
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   # volumeName: pvc-d5dbce59-f98e-4c4d-8539-bd643f60cbb3
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: prowlarr
-  namespace: media
-  labels:
-    app: prowlarr
-spec:
-  revisionHistoryLimit: 3
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: prowlarr
-  template:
-    metadata:
-      labels:
-        app: prowlarr
-    spec:
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      dnsPolicy: ClusterFirst
-      enableServiceLinks: true
-      containers:
-        - name: prowlarr
-          image: lscr.io/linuxserver/prowlarr:amd64-nightly
-          imagePullPolicy: IfNotPresent
-          resources: {}
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: "TZ"
-              value: "Europe/Amsterdam"
-          ports:
-            - name: http
-              containerPort: 9696
-              protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: 9696
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 9696
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          startupProbe:
-            tcpSocket:
-              port: 9696
-            initialDelaySeconds: 0
-            failureThreshold: 30
-            timeoutSeconds: 1
-            periodSeconds: 5
-          volumeMounts:
-            - name: prowlarr-config
-              mountPath: /config
-      volumes:
-        - name: prowlarr-config
-          persistentVolumeClaim:
-            claimName: pvc-iscsi-prowlarr-config
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: pvc-iscsi-radarr-config
+#   namespace: media
+#   labels:
+#     app: radarr
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
+# spec:
+#   storageClassName: freenas-iscsi-csi
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   # volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: bazarr
-  namespace: media
-  labels:
-    app: bazarr
-spec:
-  revisionHistoryLimit: 3
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: bazarr
-  template:
-    metadata:
-      labels:
-        app: bazarr
-    spec:
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      dnsPolicy: ClusterFirst
-      enableServiceLinks: true
-      containers:
-        - name: bazarr
-          image: lscr.io/linuxserver/bazarr:amd64-latest
-          imagePullPolicy: IfNotPresent
-          resources: {}
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: "TZ"
-              value: "Europe/Amsterdam"
-          ports:
-            - name: http
-              containerPort: 6767
-              protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: 6767
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 6767
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          startupProbe:
-            tcpSocket:
-              port: 6767
-            initialDelaySeconds: 0
-            failureThreshold: 30
-            timeoutSeconds: 1
-            periodSeconds: 5
-          volumeMounts:
-            - name: media
-              mountPath: /data/media
-            - name: bazarr-config
-              mountPath: /config
-      volumes:
-        - name: media
-          persistentVolumeClaim:
-            claimName: pvc-nfs-media
-        - name: bazarr-config
-          persistentVolumeClaim:
-            claimName: pvc-iscsi-bazarr-config
+# ---
+# kind: SealedSecret
+# apiVersion: bitnami.com/v1alpha1
+# metadata:
+#   name: transmission-vpn-cred
+#   namespace: media
+# spec:
+#   encryptedData:
+#     OPENVPN_PASSWORD: AgAP81dCkxit6aOOXu9EH1asYKa7DR4N4+LfTSeVoNVUr8ohlIz6NGQjaIEhPCteZKskH8E1F44x6XyT1Kh93r91YhHfyuadiAZ42AYiedgmFw1tdF7OPx3DzNt+9V3YJVT4GBicaHzxyc9AGgGr/DSF09pxKQVdi/QsOb+fBoNWyKTEcEUQZhlO4mDGS39oGjuNeC9aLKCbZ38YnnjGTgxPxMih8dQI2kmfYvVkcStDMwb1alagCwh7e/9agm0IRMLxergfuoIRinLM8JXV4py7KhlqSWgBvZbIu417eqmg/FDKXvUy+wJMs22ch4erB4iX36QnNxJ1R6l7uj0goe9wGvkpdqnKDUqOrs77LrT1cYkrlA6asLAxB3JoU0hZATmqSdKQ2iSpBMg9++QiFAGkV6nCvrgZHWp/qS9A8d8e6IuHqutuHET2vlx1Gs0PDO4yWNqY4WY7jG4zn+n6rC2KoGx7rzX9lR3w9CJ1fvOCzgtRDLwDcyDo9bMuxJnPiszOFKDtwmw6wFj7NcMyetJCIpoayLqS7CWfbgbWpk0MAa2h6w0SQu3tlftonGU2MQEsF+7gnhrTm/g3wTKjf60p0JBN3KGLvSb+vPm4za4mCQfBxru/5LVhTZRR5y/w6KJo5fUgKJ/FOWBoVrLBe1Ust8CYUUdUW0mOvEOKv/NAn7e3ndew2n0PILwmOmo1+zb7Chm49AoDusquVa7da0k=
+#     OPENVPN_USERNAME: AgAP57F3U8wuz8gWAZnKzxhpT++vB6S4fuiyKptSm+YdZhbiLDHg01xX7Kwp3PaO5cp4mF62IOXq7e4bxRip/SMhs6xdlJmyOzxudiknfjcpPcfz9maeYkrdfsKujsLaPflikMvpCCP7irRt/IN4xRsK4tbKzY43HhsuKxlQnNX0Nmb0YXJJ71zEFwaTInfgBHf1xQW0L64VtNFhEJlnSrak0iM3Z5kh9Msb2d0zBazH306iARwtilo2gIVUrTytMNuxrqgNDTDQyresD5F/McttQTfsgGq9An+Z9R1SJVT9GyXVIjqy6eWzqP2uYlXG//TvIpjUpNN1iLMjoKU9nHLML1XGdQ3vQFC58+tub4d9xKp4lYbZr/V7tGotZGe9a+cn+sKmtq+NJAP5atn/6vJKiA3kNp/XLJWsvyfTtXYgf+LlfIwWt2+tbSnQDnmD+NU4VInSVWKW7oTE2XF2g6AXjL6NAVKGbR0XcZpJHjMD719fJJn0UCQTNHJxLf2lquabUiHARrBPcHjlIYp8QRMuwlEWJcz4u4DbIRjHV8UBv71g9OWXcot7Qq7sMhk5BFcPSGoKeK7UMkAPWQjY/5eqpfjaka6Mb+uo0sNwjV2j1mk4lNPKY20pNW64B09fFUNOKDE6kQKKV38M198giSGO9Zh0CvjS8NmgEgQg/jK1KqQ+YMOha2kBgd1ewISmXLDNMusuAbfbnXCIq1w8aU4RWw==
+#   template:
+#     type: Opaque
+#     metadata:
+#       name: transmission-vpn-cred
+#       namespace: media
+#       labels:
+#         app: transmission
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: sonarr
-  namespace: media
-  labels:
-    app: sonarr
-spec:
-  revisionHistoryLimit: 3
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: sonarr
-  template:
-    metadata:
-      labels:
-        app: sonarr
-    spec:
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      dnsPolicy: ClusterFirst
-      enableServiceLinks: true
-      containers:
-        - name: sonarr
-          image: linuxserver/sonarr:amd64-latest
-          imagePullPolicy: IfNotPresent
-          resources: {}
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: "TZ"
-              value: "Europe/Amsterdam"
-          ports:
-            - name: http
-              containerPort: 8989
-              protocol: TCP
-          livenessProbe:
-            exec:
-              command:
-                - /usr/bin/env
-                - bash
-                - -c
-                - curl --fail localhost:8989/api/v3/system/status?apiKey=`IFS=\> && while read -d
-                  \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
-            failureThreshold: 5
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 8989
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          startupProbe:
-            tcpSocket:
-              port: 8989
-            initialDelaySeconds: 0
-            failureThreshold: 30
-            timeoutSeconds: 1
-            periodSeconds: 5
-          volumeMounts:
-            - name: downloads
-              mountPath: /data/downloads
-            - name: media
-              mountPath: /data/media
-            - name: sonarr-config
-              mountPath: /config
-      volumes:
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: pvc-nfs-downloads
-        - name: media
-          persistentVolumeClaim:
-            claimName: pvc-nfs-media
-        - name: sonarr-config
-          persistentVolumeClaim:
-            claimName: pvc-iscsi-sonarr-config
+# ---
+# kind: ConfigMap
+# apiVersion: v1
+# metadata:
+#   name: transmission-config
+#   namespace: media
+#   labels:
+#     app: transmission
+# data:
+#   LOCAL_NETWORK: 192.168.1.240/32, 192.168.10.0/24, 172.16.16.0/24
+#   NORDVPN_CATEGORY: p2p
+#   NORDVPN_COUNTRY: NL
+#   NORDVPN_PROTOCOL: tcp
+#   OPENVPN_OPTS: --inactive 3600 --ping 10 --ping-exit 60
+#   OPENVPN_PROVIDER: NORDVPN
+#   TRANSMISSION_DOWNLOAD_DIR: /data/completed
+#   TRANSMISSION_INCOMPLETE_DIR: /data/incomplete
+#   TRANSMISSION_WATCH_DIR: /data/watch
+#   TRANSMISSION_DOWNLOAD_QUEUE_SIZE: "4"
+#   TZ: Europe/Amsterdam
+#   WEBPROXY_ENABLED: "false"
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: radarr
-  namespace: media
-  labels:
-    app: radarr
-spec:
-  revisionHistoryLimit: 3
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: radarr
-  template:
-    metadata:
-      labels:
-        app: radarr
-    spec:
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      dnsPolicy: ClusterFirst
-      enableServiceLinks: true
-      containers:
-        - name: radarr
-          image: linuxserver/radarr:amd64-latest
-          imagePullPolicy: Always
-          resources: {}
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: "TZ"
-              value: "Europe/Amsterdam"
-          ports:
-            - name: http
-              containerPort: 7878
-              protocol: TCP
-          livenessProbe:
-            exec:
-              command:
-                - /usr/bin/env
-                - bash
-                - -c
-                - curl --fail localhost:7878/api/v3/system/status?apiKey=`IFS=\> && while read -d
-                  \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
-            failureThreshold: 5
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 7878
-            initialDelaySeconds: 0
-            failureThreshold: 3
-            timeoutSeconds: 1
-            periodSeconds: 10
-          startupProbe:
-            tcpSocket:
-              port: 7878
-            initialDelaySeconds: 0
-            failureThreshold: 30
-            timeoutSeconds: 1
-            periodSeconds: 5
-          volumeMounts:
-            - name: downloads
-              mountPath: /data/downloads
-            - name: media
-              mountPath: /data/media
-            - name: radarr-config
-              mountPath: /config
-      volumes:
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: pvc-nfs-downloads
-        - name: media
-          persistentVolumeClaim:
-            claimName: pvc-nfs-media
-        - name: radarr-config
-          persistentVolumeClaim:
-            claimName: pvc-iscsi-radarr-config
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: transmission
+#   namespace: media
+#   labels:
+#     app: transmission
+# spec:
+#   progressDeadlineSeconds: 600
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: transmission
+#   strategy:
+#     type: Recreate
+#   template:
+#     metadata:
+#       labels:
+#         app: transmission
+#     spec:
+#       containers:
+#         - name: transmission
+#           image: haugene/transmission-openvpn:latest
+#           imagePullPolicy: Always
+#           resources: {}
+#           envFrom:
+#             - configMapRef:
+#                 name: transmission-config
+#                 optional: false
+#             - secretRef:
+#                 name: transmission-vpn-cred
+#                 optional: false
+#           livenessProbe:
+#             failureThreshold: 3
+#             initialDelaySeconds: 10
+#             periodSeconds: 2
+#             successThreshold: 1
+#             tcpSocket:
+#               port: 9091
+#             timeoutSeconds: 2
+#           readinessProbe:
+#             failureThreshold: 3
+#             initialDelaySeconds: 10
+#             periodSeconds: 2
+#             successThreshold: 2
+#             tcpSocket:
+#               port: 9091
+#             timeoutSeconds: 2
+#           securityContext:
+#             allowPrivilegeEscalation: true
+#             capabilities:
+#               add:
+#                 - NET_ADMIN
+#             privileged: true
+#           volumeMounts:
+#             - mountPath: /data/
+#               name: transmission-data
+#             - mountPath: /dev/net/tun
+#               name: tunnel
+#       restartPolicy: Always
+#       terminationGracePeriodSeconds: 30
+#       volumes:
+#         - name: transmission-data
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-downloads
+#         - hostPath:
+#             path: /dev/net/tun
+#             type: ""
+#           name: tunnel
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: transmission
-  namespace: media
-  labels:
-    app: transmission
-spec:
-  selector:
-    app: transmission
-  type: ClusterIP
-  ports:
-    - port: 9091
-      protocol: TCP
-      targetPort: 9091
-  sessionAffinity: None
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: jellyfin
+#   namespace: media
+#   labels:
+#     app: jellyfin
+# spec:
+#   strategy:
+#     type: Recreate
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: jellyfin
+#   template:
+#     metadata:
+#       labels:
+#         app: jellyfin
+#     spec:
+#       containers:
+#         - name: jellyfin
+#           image: jellyfin/jellyfin:latest
+#           imagePullPolicy: Always
+#           resources: {}
+#           ports:
+#             - name: http
+#               containerPort: 8096
+#               protocol: TCP
+#           livenessProbe:
+#             tcpSocket:
+#               port: http
+#           readinessProbe:
+#             tcpSocket:
+#               port: http
+#           volumeMounts:
+#             - name: config
+#               mountPath: /config
+#             - name: media
+#               mountPath: /media
+#       volumes:
+#         - name: config
+#           persistentVolumeClaim:
+#             claimName: pvc-iscsi-jellyfin-config
+#         - name: media
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-media
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: jellyfin
-  namespace: media
-  labels:
-    app: jellyfin
-spec:
-  selector:
-    app: jellyfin
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 8096
-      protocol: TCP
-      targetPort: http
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: prowlarr
+#   namespace: media
+#   labels:
+#     app: prowlarr
+# spec:
+#   revisionHistoryLimit: 3
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: prowlarr
+#   template:
+#     metadata:
+#       labels:
+#         app: prowlarr
+#     spec:
+#       serviceAccountName: default
+#       automountServiceAccountToken: true
+#       dnsPolicy: ClusterFirst
+#       enableServiceLinks: true
+#       containers:
+#         - name: prowlarr
+#           image: lscr.io/linuxserver/prowlarr:amd64-nightly
+#           imagePullPolicy: IfNotPresent
+#           resources: {}
+#           env:
+#             - name: PUID
+#               value: "1000"
+#             - name: PGID
+#               value: "1000"
+#             - name: "TZ"
+#               value: "Europe/Amsterdam"
+#           ports:
+#             - name: http
+#               containerPort: 9696
+#               protocol: TCP
+#           livenessProbe:
+#             tcpSocket:
+#               port: 9696
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           readinessProbe:
+#             tcpSocket:
+#               port: 9696
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           startupProbe:
+#             tcpSocket:
+#               port: 9696
+#             initialDelaySeconds: 0
+#             failureThreshold: 30
+#             timeoutSeconds: 1
+#             periodSeconds: 5
+#           volumeMounts:
+#             - name: prowlarr-config
+#               mountPath: /config
+#       volumes:
+#         - name: prowlarr-config
+#           persistentVolumeClaim:
+#             claimName: pvc-iscsi-prowlarr-config
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: bazarr
+#   namespace: media
+#   labels:
+#     app: bazarr
+# spec:
+#   revisionHistoryLimit: 3
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: bazarr
+#   template:
+#     metadata:
+#       labels:
+#         app: bazarr
+#     spec:
+#       serviceAccountName: default
+#       automountServiceAccountToken: true
+#       dnsPolicy: ClusterFirst
+#       enableServiceLinks: true
+#       containers:
+#         - name: bazarr
+#           image: lscr.io/linuxserver/bazarr:amd64-latest
+#           imagePullPolicy: IfNotPresent
+#           resources: {}
+#           env:
+#             - name: PUID
+#               value: "1000"
+#             - name: PGID
+#               value: "1000"
+#             - name: "TZ"
+#               value: "Europe/Amsterdam"
+#           ports:
+#             - name: http
+#               containerPort: 6767
+#               protocol: TCP
+#           livenessProbe:
+#             tcpSocket:
+#               port: 6767
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           readinessProbe:
+#             tcpSocket:
+#               port: 6767
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           startupProbe:
+#             tcpSocket:
+#               port: 6767
+#             initialDelaySeconds: 0
+#             failureThreshold: 30
+#             timeoutSeconds: 1
+#             periodSeconds: 5
+#           volumeMounts:
+#             - name: media
+#               mountPath: /data/media
+#             - name: bazarr-config
+#               mountPath: /config
+#       volumes:
+#         - name: media
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-media
+#         - name: bazarr-config
+#           persistentVolumeClaim:
+#             claimName: pvc-iscsi-bazarr-config
+# # ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: sonarr
+#   namespace: media
+#   labels:
+#     app: sonarr
+# spec:
+#   revisionHistoryLimit: 3
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: sonarr
+#   template:
+#     metadata:
+#       labels:
+#         app: sonarr
+#     spec:
+#       serviceAccountName: default
+#       automountServiceAccountToken: true
+#       dnsPolicy: ClusterFirst
+#       enableServiceLinks: true
+#       containers:
+#         - name: sonarr
+#           image: linuxserver/sonarr:amd64-latest
+#           imagePullPolicy: IfNotPresent
+#           resources: {}
+#           env:
+#             - name: PUID
+#               value: "1000"
+#             - name: PGID
+#               value: "1000"
+#             - name: "TZ"
+#               value: "Europe/Amsterdam"
+#           ports:
+#             - name: http
+#               containerPort: 8989
+#               protocol: TCP
+#           livenessProbe:
+#             exec:
+#               command:
+#                 - /usr/bin/env
+#                 - bash
+#                 - -c
+#                 - curl --fail localhost:8989/api/v3/system/status?apiKey=`IFS=\> && while read -d
+#                   \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+#             failureThreshold: 5
+#             initialDelaySeconds: 60
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
+#           readinessProbe:
+#             tcpSocket:
+#               port: 8989
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           startupProbe:
+#             tcpSocket:
+#               port: 8989
+#             initialDelaySeconds: 0
+#             failureThreshold: 30
+#             timeoutSeconds: 1
+#             periodSeconds: 5
+#           volumeMounts:
+#             - name: downloads
+#               mountPath: /data/downloads
+#             - name: media
+#               mountPath: /data/media
+#             - name: sonarr-config
+#               mountPath: /config
+#       volumes:
+#         - name: downloads
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-downloads
+#         - name: media
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-media
+#         - name: sonarr-config
+#           persistentVolumeClaim:
+#             claimName: pvc-iscsi-sonarr-config
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: prowlarr
-  namespace: media
-  labels:
-    app: prowlarr
-spec:
-  selector:
-    app: prowlarr
-  type: ClusterIP
-  ports:
-    - port: 9696
-      targetPort: http
-      protocol: TCP
-      name: http
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: radarr
+#   namespace: media
+#   labels:
+#     app: radarr
+# spec:
+#   revisionHistoryLimit: 3
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: radarr
+#   template:
+#     metadata:
+#       labels:
+#         app: radarr
+#     spec:
+#       serviceAccountName: default
+#       automountServiceAccountToken: true
+#       dnsPolicy: ClusterFirst
+#       enableServiceLinks: true
+#       containers:
+#         - name: radarr
+#           image: linuxserver/radarr:amd64-latest
+#           imagePullPolicy: Always
+#           resources: {}
+#           env:
+#             - name: PUID
+#               value: "1000"
+#             - name: PGID
+#               value: "1000"
+#             - name: "TZ"
+#               value: "Europe/Amsterdam"
+#           ports:
+#             - name: http
+#               containerPort: 7878
+#               protocol: TCP
+#           livenessProbe:
+#             exec:
+#               command:
+#                 - /usr/bin/env
+#                 - bash
+#                 - -c
+#                 - curl --fail localhost:7878/api/v3/system/status?apiKey=`IFS=\> && while read -d
+#                   \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+#             failureThreshold: 5
+#             initialDelaySeconds: 60
+#             periodSeconds: 10
+#             successThreshold: 1
+#             timeoutSeconds: 10
+#           readinessProbe:
+#             tcpSocket:
+#               port: 7878
+#             initialDelaySeconds: 0
+#             failureThreshold: 3
+#             timeoutSeconds: 1
+#             periodSeconds: 10
+#           startupProbe:
+#             tcpSocket:
+#               port: 7878
+#             initialDelaySeconds: 0
+#             failureThreshold: 30
+#             timeoutSeconds: 1
+#             periodSeconds: 5
+#           volumeMounts:
+#             - name: downloads
+#               mountPath: /data/downloads
+#             - name: media
+#               mountPath: /data/media
+#             - name: radarr-config
+#               mountPath: /config
+#       volumes:
+#         - name: downloads
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-downloads
+#         - name: media
+#           persistentVolumeClaim:
+#             claimName: pvc-nfs-media
+#         - name: radarr-config
+#           persistentVolumeClaim:
+#             claimName: pvc-iscsi-radarr-config
+
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: transmission
+#   namespace: media
+#   labels:
+#     app: transmission
+# spec:
+#   selector:
+#     app: transmission
+#   type: ClusterIP
+#   ports:
+#     - port: 9091
+#       protocol: TCP
+#       targetPort: 9091
+#   sessionAffinity: None
+
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: jellyfin
+#   namespace: media
+#   labels:
+#     app: jellyfin
+# spec:
+#   selector:
+#     app: jellyfin
+#   type: ClusterIP
+#   ports:
+#     - name: http
+#       port: 8096
+#       protocol: TCP
+#       targetPort: http
+
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: prowlarr
+#   namespace: media
+#   labels:
+#     app: prowlarr
+# spec:
+#   selector:
+#     app: prowlarr
+#   type: ClusterIP
+#   ports:
+#     - port: 9696
+#       targetPort: http
+#       protocol: TCP
+#       name: http
 
 ---
 kind: Service
@@ -674,116 +797,114 @@ spec:
       protocol: TCP
       port: 6767
       targetPort: http
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: sonarr
+#   namespace: media
+#   labels:
+#     app: sonarr
+# spec:
+#   selector:
+#     app: sonarr
+#   type: ClusterIP
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 8989
+#       targetPort: http
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: sonarr
-  namespace: media
-  labels:
-    app: sonarr
-spec:
-  selector:
-    app: sonarr
-  type: ClusterIP
-  ports:
-    - name: http
-      protocol: TCP
-      port: 8989
-      targetPort: http
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: radarr
+#   namespace: media
+#   labels:
+#     app: radarr
+# spec:
+#   selector:
+#     app: radarr
+#   type: ClusterIP
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 7878
+#       targetPort: http
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: radarr
-  namespace: media
-  labels:
-    app: radarr
-spec:
-  selector:
-    app: radarr
-  type: ClusterIP
-  ports:
-    - name: http
-      protocol: TCP
-      port: 7878
-      targetPort: http
+# ---
+# kind: Ingress
+# apiVersion: networking.k8s.io/v1
+# metadata:
+#   name: transmission
+#   namespace: media
+#   labels:
+#     app: transmission
+#   annotations:
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+# spec:
+#   ingressClassName: nginx-private
+#   rules:
+#     - host: transmission.k8s.lan
+#       http:
+#         paths:
+#           - path: "/"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: transmission
+#                 port:
+#                   number: 9091
 
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: transmission
-  namespace: media
-  labels:
-    app: transmission
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-spec:
-  ingressClassName: nginx-private
-  rules:
-    - host: transmission.k8s.lan
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: transmission
-                port:
-                  number: 9091
+# ---
+# kind: Ingress
+# apiVersion: networking.k8s.io/v1
+# metadata:
+#   name: jellyfin
+#   namespace: media
+#   annotations:
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#   labels:
+#     app: jellyfin
+# spec:
+#   ingressClassName: nginx-private
+#   rules:
+#     - host: jellyfin.k8s.lan
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: jellyfin
+#                 port:
+#                   name: http
 
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: jellyfin
-  namespace: media
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  labels:
-    app: jellyfin
-spec:
-  ingressClassName: nginx-private
-  rules:
-    - host: jellyfin.k8s.lan
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: jellyfin
-                port:
-                  name: http
-
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: prowlarr
-  namespace: media
-  labels:
-    app: prowlarr
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-spec:
-  ingressClassName: nginx-private
-  rules:
-    - host: prowlarr.k8s.lan
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: prowlarr
-                port:
-                  number: 9696
-
+# ---
+# kind: Ingress
+# apiVersion: networking.k8s.io/v1
+# metadata:
+#   name: prowlarr
+#   namespace: media
+#   labels:
+#     app: prowlarr
+#   annotations:
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+# spec:
+#   ingressClassName: nginx-private
+#   rules:
+#     - host: prowlarr.k8s.lan
+#       http:
+#         paths:
+#           - path: "/"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: prowlarr
+#                 port:
+#                   number: 9696
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1
@@ -807,51 +928,50 @@ spec:
                 name: bazarr
                 port:
                   number: 6767
+# ---
+# kind: Ingress
+# apiVersion: networking.k8s.io/v1
+# metadata:
+#   name: sonarr
+#   namespace: media
+#   labels:
+#     app: sonarr
+#   annotations:
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+# spec:
+#   ingressClassName: nginx-private
+#   rules:
+#     - host: sonarr.k8s.lan
+#       http:
+#         paths:
+#           - path: "/"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: sonarr
+#                 port:
+#                   number: 8989
 
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: sonarr
-  namespace: media
-  labels:
-    app: sonarr
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-spec:
-  ingressClassName: nginx-private
-  rules:
-    - host: sonarr.k8s.lan
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: sonarr
-                port:
-                  number: 8989
-
----
-kind: Ingress
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: radarr
-  namespace: media
-  labels:
-    app: radarr
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-spec:
-  ingressClassName: nginx-private
-  rules:
-    - host: radarr.k8s.lan
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: radarr
-                port:
-                  number: 7878
+# ---
+# kind: Ingress
+# apiVersion: networking.k8s.io/v1
+# metadata:
+#   name: radarr
+#   namespace: media
+#   labels:
+#     app: radarr
+#   annotations:
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+# spec:
+#   ingressClassName: nginx-private
+#   rules:
+#     - host: radarr.k8s.lan
+#       http:
+#         paths:
+#           - path: "/"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: radarr
+#                 port:
+#                   number: 7878
