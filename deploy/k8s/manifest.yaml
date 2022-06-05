@@ -123,6 +123,54 @@
 #       node_attach_driver: iscsi
 #       provisioner_driver: node-manual
 
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-iscsi-sonarr-config
+spec:
+  storageClassName: "freenas-iscsi-manual-csi"
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: org.democratic-csi.node-manual
+    readOnly: false
+    fsType: xfs
+    volumeHandle: pv-iscsi-sonarr-config
+    volumeAttributes:
+      portal: storage-server.lan:3260
+      iqn: iqn.2005-10.org.freenas.ctl:sonarr-config
+      lun: "0"
+      node_attach_driver: iscsi
+      provisioner_driver: node-manual
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-iscsi-radarr-config
+spec:
+  storageClassName: "freenas-iscsi-manual-csi"
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: org.democratic-csi.node-manual
+    readOnly: false
+    fsType: xfs
+    volumeHandle: pv-iscsi-radarr-config
+    volumeAttributes:
+      portal: storage-server.lan:3260
+      iqn: iqn.2005-10.org.freenas.ctl:radarr-config
+      lun: "0"
+      node_attach_driver: iscsi
+      provisioner_driver: node-manual
+
 # ---
 # kind: PersistentVolumeClaim
 # apiVersion: v1
@@ -214,43 +262,45 @@
 #       storage: 1Gi
 #   volumeName: pv-iscsi-bazarr-config
 
-# ---
-# kind: PersistentVolumeClaim
-# apiVersion: v1
-# metadata:
-#   name: pvc-iscsi-sonarr-config
-#   namespace: media
-#   labels:
-#     app: sonarr
-#   annotations:
-#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-# spec:
-#   storageClassName: freenas-iscsi-csi
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 1Gi
-#   # volumeName: pvc-d5dbce59-f98e-4c4d-8539-bd643f60cbb3
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-iscsi-sonarr-config
+  namespace: media
+  labels:
+    app: sonarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-manual-csi"
+spec:
+  storageClassName: freenas-iscsi-manual-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: pv-iscsi-sonarr-config
+  # volumeName: pvc-d5dbce59-f98e-4c4d-8539-bd643f60cbb3
 
-# ---
-# kind: PersistentVolumeClaim
-# apiVersion: v1
-# metadata:
-#   name: pvc-iscsi-radarr-config
-#   namespace: media
-#   labels:
-#     app: radarr
-#   annotations:
-#     volume.beta.kubernetes.io/storage-class: "freenas-iscsi-csi"
-# spec:
-#   storageClassName: freenas-iscsi-csi
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 1Gi
-#   # volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-iscsi-radarr-config
+  namespace: media
+  labels:
+    app: radarr
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-iscsi-manual-csi"
+spec:
+  storageClassName: freenas-iscsi-manual-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: pv-iscsi-radarr-config
+  # volumeName: pvc-74f2f49f-04b7-4427-a9bd-61d4b83c5d3c
 
 # ---
 # kind: SealedSecret
