@@ -486,7 +486,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: prowlarr
-          image: lscr.io/linuxserver/prowlarr:amd64-nightly
+          image: linuxserver/prowlarr:0.4.0-nightly
           imagePullPolicy: IfNotPresent
           resources: {}
           env:
