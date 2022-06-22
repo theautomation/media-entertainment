@@ -4,7 +4,7 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/theautomation/media-entertainment?logo=github)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/theautomation/media-entertainment/main?logo=github)
 
-Applications running in Kubernetes <img src="/assets/img/k8s.png" alt="K8s" style="height: 50px; width:50px;"/>
+Application running in Kubernetes <img src="https://github.com/theautomation/kubernetes-gitops/blob/main/assets/img/k8s.png?raw=true" alt="K8s" style="height: 40px; width:40px;"/>
 
 This repository contains a full media-entertaiment application stack running in my Kubernetes cluster. 
 
