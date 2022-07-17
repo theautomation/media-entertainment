@@ -59,7 +59,7 @@ metadata:
 spec:
   storageClassName: "freenas-iscsi-manual-csi"
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -221,7 +221,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
   volumeName: pv-iscsi-jellyfin-config
 
 ---
